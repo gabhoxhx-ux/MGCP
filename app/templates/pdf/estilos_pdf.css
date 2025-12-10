@@ -1,0 +1,275 @@
+/* ============================================
+   ESTILOS PARA PDFs - MGCP
+   ============================================ */
+
+@page {
+    size: Letter;
+    margin: 2cm;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11pt;
+    line-height: 1.6;
+    color: #333;
+}
+
+.documento {
+    width: 100%;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.logo-empresa h1 {
+    font-size: 28pt;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.logo-empresa .slogan {
+    font-size: 10pt;
+    color: #7f8c8d;
+    font-style: italic;
+}
+
+.info-documento {
+    text-align: right;
+}
+
+.info-documento h2 {
+    font-size: 18pt;
+    color: #e74c3c;
+    margin-bottom: 10px;
+}
+
+.info-documento p {
+    font-size: 10pt;
+    margin: 3px 0;
+}
+
+/* ============================================
+   SEPARADORES
+   ============================================ */
+
+.separador {
+    border: none;
+    border-top: 3px solid #e74c3c;
+    margin: 20px 0;
+}
+
+.separador-footer {
+    border: none;
+    border-top: 1px solid #bdc3c7;
+    margin: 15px 0;
+}
+
+/* ============================================
+   SECCIONES
+   ============================================ */
+
+.seccion {
+    margin-bottom: 25px;
+    page-break-inside: avoid;
+}
+
+.seccion h3 {
+    font-size: 14pt;
+    color: #2c3e50;
+    background-color: #ecf0f1;
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    border-left: 4px solid #e74c3c;
+}
+
+.seccion h4 {
+    font-size: 12pt;
+    color: #34495e;
+    margin: 15px 0 8px 0;
+}
+
+.seccion p {
+    text-align: justify;
+    margin-bottom: 10px;
+}
+
+.descripcion {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-left: 3px solid #3498db;
+    font-style: italic;
+}
+
+/* ============================================
+   TABLAS
+   ============================================ */
+
+.tabla-info {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+}
+
+.tabla-info td {
+    padding: 8px;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.tabla-info .label {
+    font-weight: bold;
+    width: 30%;
+    color: #7f8c8d;
+}
+
+.tabla-info .valor {
+    width: 70%;
+}
+
+.tabla-costos {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+
+.tabla-costos thead {
+    background-color: #34495e;
+    color: white;
+}
+
+.tabla-costos th {
+    padding: 10px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.tabla-costos td {
+    padding: 10px;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.tabla-costos .derecha {
+    text-align: right;
+    font-family: 'Courier New', monospace;
+}
+
+.tabla-costos tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.tabla-costos .total {
+    background-color: #e8f8f5;
+    border-top: 2px solid #27ae60;
+    font-size: 12pt;
+}
+
+.tabla-costos .total td {
+    padding: 12px 10px;
+}
+
+/* ============================================
+   LISTAS
+   ============================================ */
+
+.lista-condiciones {
+    margin-left: 25px;
+    margin-top: 10px;
+}
+
+.lista-condiciones li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+/* ============================================
+   TÉRMINOS
+   ============================================ */
+
+.terminos {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border: 1px solid #ddd;
+    font-size: 9pt;
+    line-height: 1.5;
+}
+
+/* ============================================
+   FIRMAS (Solo para contratos)
+   ============================================ */
+
+.seccion-firmas {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 50px;
+    page-break-inside: avoid;
+}
+
+.firma-bloque {
+    text-align: center;
+    width: 45%;
+}
+
+.linea-firma {
+    border-top: 2px solid #333;
+    margin-bottom: 10px;
+    margin-top: 60px;
+}
+
+.firma-bloque p {
+    margin: 5px 0;
+    font-size: 10pt;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+.footer {
+    margin-top: 40px;
+    page-break-inside: avoid;
+}
+
+.texto-footer {
+    font-size: 9pt;
+    color: #7f8c8d;
+    text-align: center;
+    line-height: 1.4;
+}
+
+/* ============================================
+   UTILIDADES
+   ============================================ */
+
+.destacado {
+    background-color: #fff3cd;
+    padding: 10px;
+    border-left: 3px solid #ffc107;
+    margin: 15px 0;
+}
+
+.alerta {
+    background-color: #f8d7da;
+    padding: 10px;
+    border-left: 3px solid #dc3545;
+    margin: 15px 0;
+}
+
+.exito {
+    background-color: #d4edda;
+    padding: 10px;
+    border-left: 3px solid #28a745;
+    margin: 15px 0;
+}

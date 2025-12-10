@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="detalle-propuesta">
+    <div class="header-propuesta">
+        <h2>{{ propuesta.numero_propuesta }}</h2>
+        <span class="badge badge-{{ propuesta.estado|lower }}">{{ propuesta.estado }}</span>
+    </div>
+
+    <div class="info-grid">
+        <div class="info-section">
+            <h3>Información del Cliente</h3>
+            <p><strong>Nombre:</strong> {{ propuesta.cliente.nombre }}</p>
+            <p><strong>Email:</strong> {{ propuesta.cliente.email }}</p>
+            <p><strong>Teléfono:</strong> {{ propuesta.cliente.telefono }}</p>
+        </div>
+
+        <div class="info-section">
+            <h3>Detalles de la Propuesta</h3>
+            <p><strong>Versión Actual:</strong> {{ propuesta.version }}</p>
+            <p><strong>Creada:</strong> {{ propuesta.fecha_creacion.strftime('%Y-%m-%d %H:%M') }}</p>
+            <p><strong>Enviada:</strong> {{ propuesta.fecha_envio.strftime('%Y-%m-%d %H:%M') if propuesta.fecha_envio else 'No enviada' }}</p>
+            {% if propuesta.fecha_expiracion %}
+            <p><strong>Expira:</strong> {{ propuesta.fecha_expiracion.strftime('%Y-%m-%d %H:%M') }}</p>
+            {% endif %}
+        </div>
+
+        <div class="info-section">
+            <h3>Servicio de Transporte</h3>
+            <p><strong>Tipo:</strong> {{ propuesta.tipo_servicio }}</p>
+            <p><strong>Ruta:</strong> {{ propuesta.origen }} → {{ propuesta.destino }}</p>
+            <p><strong>Distancia:</strong> {{ propuesta.distancia_km }} km</p>
+            <p><strong>Camión:</strong> {{ propuesta.tipo_camion }} ({{ propuesta.cantidad_camiones }})</p>
+        </div>
+    </div>
+
+    <div class="costos-seccion">
+        <h3>Cálculo de Costos</h3>
+        <table class="table-costos">
+            <tr>
+                <td>Costo Directo:</td>
+                <td class="numero">{{ propuesta.costo_directo|clp }}</td>
+            </tr>
+            <tr>
+                <td>Costo Indirecto:</td>
+                <td class="numero">{{ propuesta.costo_indirecto_aplicado|clp }}</td>
+            </tr>
+            <tr>
+                <td>Utilidad ({{ propuesta.utilidad_porcentaje }}%):</td>
+                <td class="numero">{{ (propuesta.costo_directo * propuesta.utilidad_porcentaje / 100)|clp }}</td>
+            </tr>
+            <tr class="total">
+                <td>PRECIO FINAL:</td>
+                <td class="numero">{{ propuesta.precio_final|clp }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="descripcion-servicio">
+        <h3>Descripción del Servicio</h3>
+        <p>{{ propuesta.descripcion_servicio }}</p>
+    </div>
+
+    <div class="acciones-propuesta">
+        <h3>Acciones</h3>
+        {% if propuesta.estado in ['PREGENERADA', 'REVISION'] %}
+            <button onclick="enviarPropuesta('{{ propuesta.id }}')" class="btn btn-primary">📧 Enviar al Cliente</button>
+            <button onclick="modificarPropuesta('{{ propuesta.id }}')" class="btn btn-warning">✏️ Modificar Utilidad</button>
+        {% elif propuesta.estado == 'ENVIADA' %}
+            <button onclick="copiarEnlace('{{ url_for('portal_cliente', token=propuesta.token_acceso, _external=True) }}')" class="btn btn-secondary">🔗 Copiar Enlace Cliente</button>
+        {% elif propuesta.estado == 'ACEPTADA' %}
+            <span class="badge badge-success">✅ Propuesta Aceptada</span>
+        {% endif %}
+        
+        {% if documentos %}
+        <div style="margin-top: 20px;">
+            <h4>Documentos Generados:</h4>
+            {% for doc in documentos %}
+            <a href="{{ url_for('ver_documento', documento_id=doc.id) }}" class="btn btn-small" target="_blank">
+                📄 {{ doc.tipo }} v{{ doc.version }}
+                {% if doc.firmado %}✍️ Firmado{% endif %}
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <a href="{{ url_for('listar_propuestas') }}" class="btn btn-secondary">Volver al Listado</a>
+    </div>
+
+    {% if versiones %}
+    <div class="versiones-section">
+        <h3>Historial de Versiones</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Versión</th>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Cambios Realizados</th>
+                    <th>Precio</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for version in versiones %}
+                <tr>
+                    <td>v{{ version.numero_version }}</td>
+                    <td>{{ version.fecha_cambio.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>{{ version.usuario }}</td>
+                    <td>{{ version.cambios_realizados }}</td>
+                    <td>{{ version.precio_final|clp }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    {% if respuestas_cliente %}
+    <div class="respuestas-section">
+        <h3>Respuestas del Cliente</h3>
+        {% for respuesta in respuestas_cliente %}
+        <div class="respuesta-item">
+            <strong>{{ respuesta.tipo_respuesta }}</strong> - {{ respuesta.fecha_respuesta.strftime('%Y-%m-%d %H:%M') }}
+            {% if respuesta.comentarios %}
+            <p>{{ respuesta.comentarios }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Portal del Cliente -->
+    {% if propuesta.estado in ['ENVIADA', 'NEGOCIACION'] %}
+    <div class="portal-cliente-info">
+        <h3>Enlace del Portal del Cliente</h3>
+        <p>Comparta este enlace con el cliente para que visualice y responda la propuesta:</p>
+        <div class="enlace-container">
+            <input type="text" id="enlace_cliente" value="{{ url_for('portal_cliente', token=propuesta.token_acceso, _external=True) }}" readonly>
+            <button onclick="copiarEnlace()" class="btn btn-small">Copiar</button>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function enviarPropuesta(propuestaId) {
+    if (confirm('¿Enviar propuesta al cliente?')) {
+        fetch('/propuestas/' + propuestaId + '/enviar', {
+            method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('✅ Propuesta enviada exitosamente!\\n\\nEnlace del cliente:\\n' + data.enlace);
+                location.reload();
+            } else {
+                alert('❌ Error: ' + data.error);
+            }
+        });
+    }
+}
+
+function modificarPropuesta(propuestaId) {
+    const nuevaUtilidad = prompt('Ingrese nueva utilidad (25-35%):', '30');
+    if (nuevaUtilidad !== null) {
+        fetch('/propuestas/' + propuestaId + '/modificar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                utilidad_porcentaje: parseFloat(nuevaUtilidad),
+                usuario_director: 'Director ACME'
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('✅ Propuesta actualizada a versión ' + data.nueva_version);
+                location.reload();
+            } else {
+                alert('❌ Error: ' + data.error);
+            }
+        });
+    }
+}
+
+function copiarEnlace(enlace) {
+    navigator.clipboard.writeText(enlace).then(() => {
+        alert('✅ Enlace copiado al portapapeles:\\n\\n' + enlace);
+    }).catch(err => {
+        prompt('Copie este enlace:', enlace);
+    });
+}
+</script>
+{% endblock %}

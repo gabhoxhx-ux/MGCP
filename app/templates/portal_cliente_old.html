@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta - {{ propuesta.numero_propuesta }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/portal_cliente.css') }}">
+</head>
+<body>
+    <div class="portal-cliente">
+        <div class="container">
+            <div class="header">
+                <div class="logo">
+                    <h1>ACME TRANS</h1>
+                    <p>Propuesta de Transporte</p>
+                </div>
+                <div class="info-header">
+                    <p><strong>Propuesta #:</strong> {{ propuesta.numero_propuesta }}</p>
+                    <p><strong>Versión:</strong> {{ propuesta.version }}</p>
+                </div>
+            </div>
+
+            <div class="propuesta-container">
+                <!-- Documentos Disponibles -->
+                <section class="section documentos-section" id="documentosSection">
+                    <h2>📄 Documentos Disponibles</h2>
+                    <div id="listaDocumentos">
+                        <p>Cargando documentos...</p>
+                    </div>
+                </section>
+
+                <!-- Cliente -->
+                <section class="section cliente-info">
+                    <h2>Cliente</h2>
+                    <p><strong>Empresa:</strong> {{ propuesta.cliente.nombre }}</p>
+                    <p><strong>Email:</strong> {{ propuesta.cliente.email }}</p>
+                    <p><strong>Teléfono:</strong> {{ propuesta.cliente.telefono }}</p>
+                    <p><strong>Dirección:</strong> {{ propuesta.cliente.direccion }}</p>
+                </section>
+
+                <!-- Servicio -->
+                <section class="section servicio-info">
+                    <h2>Descripción del Servicio</h2>
+                    <div class="descripcion">{{ propuesta.descripcion_servicio }}</div>
+                </section>
+
+                <!-- Desglose de Costos -->
+                <section class="section desglose-costos">
+                    <h2>Desglose de Costos</h2>
+                    <table class="tabla-costos">
+                        <tr>
+                            <td class="label">Costo del Servicio (Operativo):</td>
+                            <td class="valor">{{ propuesta.costo_directo|clp }}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Costo Administrativo:</td>
+                            <td class="valor">{{ propuesta.costo_indirecto_aplicado|clp }}</td>
+                        </tr>
+                        <tr class="fila-utilidad">
+                            <td class="label">Utilidad ({{ propuesta.utilidad_porcentaje }}%):</td>
+                            <td class="valor">{{ (propuesta.costo_directo * propuesta.utilidad_porcentaje / 100)|clp }}</td>
+                        </tr>
+                        <tr class="fila-total">
+                            <td class="label"><strong>TOTAL A PAGAR:</strong></td>
+                            <td class="valor"><strong>{{ propuesta.precio_final|clp }}</strong></td>
+                        </tr>
+                    </table>
+                </section>
+
+                <!-- Acciones del Cliente -->
+                <section class="section acciones-cliente">
+                    <h2>¿Qué desea hacer?</h2>
+                    <div class="botones-accion">
+                        <button onclick="aceptarPropuesta()" class="btn btn-aceptar">✓ Aceptar Propuesta</button>
+                        <button onclick="mostrarFormularioNegociacion()" class="btn btn-negociar">↻ Solicitar Negociación</button>
+                        <button onclick="rechazarPropuesta()" class="btn btn-rechazar">✗ Rechazar Propuesta</button>
+                    </div>
+                </section>
+
+                <!-- Formulario de Negociación (oculto) -->
+                <div id="formularioNegociacion" class="formulario-negociacion" style="display:none;">
+                    <h3>Solicitar Negociación</h3>
+                    <p>Cuéntenos qué cambios sugiere para esta propuesta:</p>
+                    <textarea id="comentariosNegociacion" rows="4" placeholder="Escriba sus comentarios aquí..."></textarea>
+                    <button onclick="enviarNegociacion()" class="btn btn-primary">Enviar Solicitud</button>
+                    <button onclick="ocultarFormularioNegociacion()" class="btn btn-secondary">Cancelar</button>
+                </div>
+
+                <!-- Historial de Versiones -->
+                {% if versiones and versiones|length > 1 %}
+                <section class="section historial-versiones">
+                    <h2>Historial de Versiones</h2>
+                    <table class="tabla-versiones">
+                        <thead>
+                            <tr>
+                                <th>Versión</th>
+                                <th>Fecha</th>
+                                <th>Precio</th>
+                                <th>Cambios</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for version in versiones %}
+                            <tr>
+                                <td>v{{ version.numero_version }}</td>
+                                <td>{{ version.fecha_cambio.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>{{ version.precio_final|clp }}</td>
+                                <td>{{ version.cambios_realizados }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </section>
+                {% endif %}
+
+                <!-- Información de Validez -->
+                <section class="section info-validez">
+                    <h3>Información Importante</h3>
+                    {% if propuesta.fecha_expiracion %}
+                    <p>Esta propuesta es válida hasta el <strong>{{ propuesta.fecha_expiracion.strftime('%d/%m/%Y a las %H:%M') }}</strong></p>
+                    {% endif %}
+                    <p>Para aceptar, rechazar o negociar, use los botones de la sección anterior.</p>
+                </section>
+            </div>
+
+            <footer class="footer-portal">
+                <p>&copy; 2025 ACME TRANS - Transporte de Carga Confiable</p>
+                <p>Para consultas, contacte a: contacto@acmetrans.cl</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // Cargar documentos disponibles al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarDocumentos();
+        });
+
+        function cargarDocumentos() {
+            fetch('/cliente/documentos/{{ propuesta.token_acceso }}')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('listaDocumentos');
+                    if (data.documentos && data.documentos.length > 0) {
+                        let html = '<div class="grid-documentos">';
+                        data.documentos.forEach(doc => {
+                            const fecha = new Date(doc.fecha).toLocaleString('es-CL');
+                            const icono = doc.tipo === 'PROPUESTA' ? '📄' : '📝';
+                            const titulo = doc.tipo === 'PROPUESTA' ? 'Propuesta Económica' : 'Contrato de Transporte';
+                            
+                            html += `
+                                <div class="documento-card">
+                                    <div class="doc-icono">${icono}</div>
+                                    <div class="doc-info">
+                                        <h3>${titulo}</h3>
+                                        <p>Versión ${doc.version}</p>
+                                        <p class="doc-fecha">${fecha}</p>
+                                    </div>
+                                    <a href="${doc.url_descarga}" class="btn-descargar" download>
+                                        ⬇️ Descargar PDF
+                                    </a>
+                                </div>
+                            `;
+                        });
+                        html += '</div>';
+                        container.innerHTML = html;
+                    } else {
+                        container.innerHTML = '<p>No hay documentos disponibles aún.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error cargando documentos:', error);
+                    document.getElementById('listaDocumentos').innerHTML = '<p>Error cargando documentos.</p>';
+                });
+        }
+
+        function aceptarPropuesta() {
+            if (confirm('¿Confirma la aceptación de esta propuesta?\\n\\nSe generará automáticamente el contrato de transporte.')) {
+                enviarRespuesta('ACEPTADA', '');
+            }
+        }
+
+        function rechazarPropuesta() {
+            if (confirm('¿Desea rechazar esta propuesta?')) {
+                const motivo = prompt('Indique brevemente el motivo del rechazo:');
+                if (motivo !== null) {
+                    enviarRespuesta('RECHAZADA', motivo);
+                }
+            }
+        }
+
+        function mostrarFormularioNegociacion() {
+            document.getElementById('formularioNegociacion').style.display = 'block';
+        }
+
+        function ocultarFormularioNegociacion() {
+            document.getElementById('formularioNegociacion').style.display = 'none';
+        }
+
+        function enviarNegociacion() {
+            const comentarios = document.getElementById('comentariosNegociacion').value;
+            if (comentarios.trim() === '') {
+                alert('Por favor, escriba sus comentarios');
+                return;
+            }
+            enviarRespuesta('NEGOCIACION', comentarios);
+        }
+
+        function enviarRespuesta(tipo, comentarios) {
+            fetch('/cliente/respuesta/{{ propuesta.token_acceso }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    tipo: tipo,
+                    comentarios: comentarios
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    let mensaje = '✅ ' + data.mensaje;
+                    if (data.contrato_generado) {
+                        mensaje += '\\n\\n📝 El contrato ha sido generado automáticamente y está disponible para descarga.';
+                    }
+                    alert(mensaje);
+                    location.reload();
+                } else {
+                    alert('❌ Error: ' + data.error);
+                }
+            })
+            .catch(error => alert('Error de conexión: ' + error));
+        }
+    </script>
+
+    <style>
+        .documentos-section {
+            background-color: #f0f8ff;
+            border: 2px solid #3498db;
+        }
+
+        .grid-documentos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .documento-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .documento-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .doc-icono {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .doc-info h3 {
+            color: #2c3e50;
+            margin: 10px 0 5px 0;
+            font-size: 16px;
+        }
+
+        .doc-info p {
+            color: #7f8c8d;
+            margin: 3px 0;
+            font-size: 13px;
+        }
+
+        .doc-fecha {
+            font-size: 11px !important;
+            font-style: italic;
+        }
+
+        .btn-descargar {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #27ae60;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn-descargar:hover {
+            background-color: #229954;
+        }
+    </style>
+</body>
+</html>

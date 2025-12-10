@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Contrato {{ numero_propuesta }}</title>
+    <link rel="stylesheet" href="{{ css_path }}">
+</head>
+<body>
+    <div class="documento">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo-empresa">
+                <h1>ACME TRANS</h1>
+                <p class="slogan">Transporte de Carga Confiable</p>
+            </div>
+            <div class="info-documento">
+                <h2>CONTRATO DE TRANSPORTE</h2>
+                <p><strong>N° Contrato:</strong> {{ numero_propuesta }}</p>
+                <p><strong>Fecha:</strong> {{ fecha }}</p>
+            </div>
+        </div>
+
+        <hr class="separador">
+
+        <!-- Partes del Contrato -->
+        <div class="seccion">
+            <h3>PARTES</h3>
+            <p>
+                <strong>EL TRANSPORTISTA:</strong> ACME TRANS SpA, RUT 76.XXX.XXX-X, representada por su Director General,
+                con domicilio en Av. Principal 1234, Santiago, Chile.
+            </p>
+            <p>
+                <strong>EL CLIENTE:</strong> {{ cliente.nombre }}, con domicilio en {{ cliente.direccion }},
+                Email: {{ cliente.email }}, Teléfono: {{ cliente.telefono }}.
+            </p>
+        </div>
+
+        <!-- Objeto del Contrato -->
+        <div class="seccion">
+            <h3>PRIMERO: OBJETO DEL CONTRATO</h3>
+            <p>
+                Por el presente instrumento, <strong>EL TRANSPORTISTA</strong> se compromete a prestar servicios
+                de transporte de carga para <strong>EL CLIENTE</strong>, consistente en:
+            </p>
+            <p class="descripcion">{{ descripcion_servicio }}</p>
+        </div>
+
+        <!-- Precio y Forma de Pago -->
+        <div class="seccion">
+            <h3>SEGUNDO: PRECIO Y FORMA DE PAGO</h3>
+            <p>
+                <strong>EL CLIENTE</strong> pagará a <strong>EL TRANSPORTISTA</strong> el monto total de
+                <strong>{{ precio_final }}</strong> por el servicio descrito.
+            </p>
+            
+            <h4>Desglose de Costos:</h4>
+            <table class="tabla-costos">
+                <tr>
+                    <td>Costo Operativo del Servicio:</td>
+                    <td class="derecha">{{ costo_directo }}</td>
+                </tr>
+                <tr>
+                    <td>Costos Administrativos:</td>
+                    <td class="derecha">{{ costo_indirecto }}</td>
+                </tr>
+                <tr>
+                    <td>Utilidad ({{ utilidad_porcentaje }}%):</td>
+                    <td class="derecha">{{ utilidad_monto }}</td>
+                </tr>
+                <tr class="total">
+                    <td><strong>TOTAL</strong></td>
+                    <td class="derecha"><strong>{{ precio_final }}</strong></td>
+                </tr>
+            </table>
+
+            <p><strong>Condiciones de Pago:</strong> {{ condiciones_pago }}</p>
+        </div>
+
+        <!-- Obligaciones del Transportista -->
+        <div class="seccion">
+            <h3>TERCERO: OBLIGACIONES DEL TRANSPORTISTA</h3>
+            <ul class="lista-condiciones">
+                <li>Realizar el transporte de la carga en las condiciones acordadas</li>
+                <li>Garantizar la integridad de la mercancía durante el transporte</li>
+                <li>Entregar la carga en el lugar y tiempo acordados</li>
+                <li>Contar con los seguros y permisos necesarios</li>
+                <li>Mantener comunicación constante sobre el estado del transporte</li>
+            </ul>
+        </div>
+
+        <!-- Obligaciones del Cliente -->
+        <div class="seccion">
+            <h3>CUARTO: OBLIGACIONES DEL CLIENTE</h3>
+            <ul class="lista-condiciones">
+                <li>Entregar la carga en condiciones aptas para el transporte</li>
+                <li>Proporcionar documentación necesaria para el transporte</li>
+                <li>Efectuar el pago en los términos acordados</li>
+                <li>Facilitar las coordinaciones necesarias para carga y descarga</li>
+                <li>Notificar cualquier característica especial de la carga</li>
+            </ul>
+        </div>
+
+        <!-- Vigencia y Término -->
+        <div class="seccion">
+            <h3>QUINTO: VIGENCIA Y TÉRMINO</h3>
+            <p>
+                El presente contrato tendrá vigencia desde su firma hasta la completa ejecución del servicio
+                y el pago total por parte del cliente. Cualquier modificación debe ser acordada por escrito
+                por ambas partes.
+            </p>
+        </div>
+
+        <!-- Jurisdicción -->
+        <div class="seccion">
+            <h3>SEXTO: JURISDICCIÓN</h3>
+            <p>
+                Para todos los efectos derivados del presente contrato, las partes fijan su domicilio en la
+                ciudad de Santiago, Chile, sometiéndose a la jurisdicción de sus tribunales ordinarios de justicia.
+            </p>
+        </div>
+
+        <!-- Términos Adicionales -->
+        <div class="seccion">
+            <h3>SÉPTIMO: TÉRMINOS ADICIONALES</h3>
+            <div class="terminos">
+                {{ terminos_condiciones }}
+            </div>
+        </div>
+
+        <!-- Espacio para Firmas -->
+        <div class="seccion-firmas">
+            <div class="firma-bloque">
+                <div class="linea-firma"></div>
+                <p><strong>EL TRANSPORTISTA</strong></p>
+                <p>ACME TRANS SpA</p>
+                <p>Director General</p>
+            </div>
+
+            <div class="firma-bloque">
+                <div class="linea-firma"></div>
+                <p><strong>EL CLIENTE</strong></p>
+                <p>{{ cliente.nombre }}</p>
+                <p>{{ fecha }}</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <hr class="separador-footer">
+            <p class="texto-footer">
+                Contrato generado automáticamente por el Sistema MGCP de ACME TRANS<br>
+                Basado en la propuesta N° {{ numero_propuesta }} aceptada el {{ fecha }}<br>
+                <strong>Contacto:</strong> contacto@acmetrans.cl | <strong>Teléfono:</strong> +56 2 1234 5678
+            </p>
+        </div>
+    </div>
+</body>
+</html>

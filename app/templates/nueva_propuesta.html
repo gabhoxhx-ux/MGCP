@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="nueva-propuesta">
+    <h2>Crear Nueva Propuesta Económica</h2>
+    
+    <form id="formularioPropuesta" class="form-propuesta">
+        <div class="form-group">
+            <label for="cliente_id">Cliente *</label>
+            <select id="cliente_id" name="cliente_id" required>
+                <option value="">-- Seleccionar Cliente --</option>
+                {% for cliente in clientes %}
+                <option value="{{ cliente.id }}">{{ cliente.nombre }} ({{ cliente.email }})</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="descripcion_servicio">Descripción del Servicio *</label>
+            <textarea id="descripcion_servicio" name="descripcion_servicio" rows="4" required></textarea>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="costo_directo">Costo Directo ($) *</label>
+                <input type="number" id="costo_directo" name="costo_directo" step="0.01" required>
+                <small>Combustible, peajes, etc.</small>
+            </div>
+
+            <div class="form-group">
+                <label for="utilidad_porcentaje">Utilidad (%) *</label>
+                <input type="number" id="utilidad_porcentaje" name="utilidad_porcentaje" min="25" max="35" step="0.5" value="30" required>
+                <small>Entre 25% y 35%</small>
+            </div>
+        </div>
+
+        <div class="calculo-automatico">
+            <h3>Cálculo Automático</h3>
+            <div class="calculo-row">
+                <div class="calculo-item">
+                    <label>Costo Directo:</label>
+                    <span id="mostrar_costo_directo">CLP $0</span>
+                </div>
+                <div class="calculo-item">
+                    <label>Costo Indirecto (Promedio):</label>
+                    <span id="mostrar_costo_indirecto">CLP $0</span>
+                </div>
+                <div class="calculo-item">
+                    <label>Utilidad:</label>
+                    <span id="mostrar_utilidad">CLP $0</span>
+                </div>
+                <div class="calculo-item total">
+                    <label>Precio Final:</label>
+                    <span id="mostrar_precio_final">CLP $0</span>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Crear Propuesta</button>
+    </form>
+</div>
+
+<script>
+document.getElementById('formularioPropuesta').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const datos = {
+        cliente_id: document.getElementById('cliente_id').value,
+        costo_directo: parseFloat(document.getElementById('costo_directo').value),
+        descripcion_servicio: document.getElementById('descripcion_servicio').value,
+        utilidad_porcentaje: parseFloat(document.getElementById('utilidad_porcentaje').value),
+        usuario_director: 'Director ACME'
+    };
+
+    fetch('{{ url_for("nueva_propuesta") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(datos)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('✅ Propuesta creada exitosamente!\\nNúmero: ' + data.numero_propuesta + '\\nPrecio Final: CLP $' + Math.round(data.precio_final).toLocaleString('es-CL'));
+            window.location.href = '{{ url_for("ver_propuesta", propuesta_id="") }}' + data.propuesta_id;
+        } else {
+            alert('❌ Error: ' + data.error);
+        }
+    })
+    .catch(error => alert('Error: ' + error));
+});
+
+// Actualizar cálculo en tiempo real
+document.getElementById('costo_directo').addEventListener('input', actualizarCalculo);
+document.getElementById('utilidad_porcentaje').addEventListener('input', actualizarCalculo);
+
+function actualizarCalculo() {
+    const costoDirecto = parseFloat(document.getElementById('costo_directo').value) || 0;
+    const utilidad = parseFloat(document.getElementById('utilidad_porcentaje').value) || 0;
+    const costoIndirecto = 1500000; // Valor de ejemplo
+    
+    const montoUtilidad = costoDirecto * (utilidad / 100);
+    const precioFinal = costoDirecto + costoIndirecto + montoUtilidad;
+    
+    const formatoMiles = (n) => Math.round(n).toLocaleString('es-CL');
+    
+    document.getElementById('mostrar_costo_directo').textContent = 'CLP $' + formatoMiles(costoDirecto);
+    document.getElementById('mostrar_costo_indirecto').textContent = 'CLP $' + formatoMiles(costoIndirecto);
+    document.getElementById('mostrar_utilidad').textContent = 'CLP $' + formatoMiles(montoUtilidad);
+    document.getElementById('mostrar_precio_final').textContent = 'CLP $' + formatoMiles(precioFinal);
+}
+
+// Inicializar
+actualizarCalculo();
+</script>
+{% endblock %}

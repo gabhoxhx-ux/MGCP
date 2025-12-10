@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="propuestas-listado">
+    <h2>Listado de Propuestas</h2>
+    
+    <div class="filters">
+        <a href="{{ url_for('listar_propuestas') }}" class="btn">Todas</a>
+        <a href="{{ url_for('listar_propuestas', estado='BORRADOR') }}" class="btn">Borradores</a>
+        <a href="{{ url_for('listar_propuestas', estado='ENVIADA') }}" class="btn">Enviadas</a>
+        <a href="{{ url_for('listar_propuestas', estado='ACEPTADA') }}" class="btn btn-success">Aceptadas</a>
+        <a href="{{ url_for('listar_propuestas', estado='NEGOCIACION') }}" class="btn btn-warning">En Negociación</a>
+    </div>
+
+    {% if propuestas %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Número de Propuesta</th>
+                    <th>Cliente</th>
+                    <th>Costo Directo</th>
+                    <th>Utilidad %</th>
+                    <th>Precio Final</th>
+                    <th>Estado</th>
+                    <th>Versión</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prop in propuestas %}
+                <tr>
+                    <td>{{ prop.numero_propuesta }}</td>
+                    <td>{{ prop.cliente.nombre }}</td>
+                    <td>{{ prop.costo_directo|clp }}</td>
+                    <td>{{ prop.utilidad_porcentaje }}%</td>
+                    <td><strong>{{ prop.precio_final|clp }}</strong></td>
+                    <td><span class="badge badge-{{ prop.estado|lower }}">{{ prop.estado }}</span></td>
+                    <td>v{{ prop.version }}</td>
+                    <td>
+                        <a href="{{ url_for('ver_propuesta', propuesta_id=prop.id) }}" class="btn btn-small">Editar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-info">
+            No hay propuestas para mostrar
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

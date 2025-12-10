@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contrato - </title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 1.6;
+            color: #333;
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+            background: #f5f5f5;
+        }
+
+        .contrato {
+            background: white;
+            padding: 60px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #1a1a2e;
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+
+        .header .numero-contrato {
+            font-size: 1.2em;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .seccion {
+            margin-bottom: 30px;
+        }
+
+        .seccion h2 {
+            font-size: 1.5em;
+            color: #1a1a2e;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .partes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .parte {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .parte h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .parte p {
+            margin: 5px 0;
+        }
+
+        .objeto-contrato {
+            background: #e8f5e9;
+            padding: 20px;
+            border-left: 4px solid #27ae60;
+            margin: 20px 0;
+        }
+
+        .detalles-servicio {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .detalles-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .detalle-item {
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+        }
+
+        .detalle-item strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .monto-total {
+            background: #1a1a2e;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+
+        .monto-total .label {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .monto-total .valor {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        .clausulas {
+            margin: 30px 0;
+        }
+
+        .clausula {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 3px solid #667eea;
+        }
+
+        .clausula h4 {
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+
+        .firmas {
+            margin-top: 60px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+
+        .firma-box {
+            text-align: center;
+        }
+
+        .firma-linea {
+            border-top: 2px solid #333;
+            margin: 60px 0 10px 0;
+        }
+
+        .firma-label {
+            font-weight: bold;
+            color: #666;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #ddd;
+            text-align: center;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .contrato {
+                box-shadow: none;
+                padding: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="contrato">
+        <div class="header">
+            <h1>📜 CONTRATO DE SERVICIOS DE TRANSPORTE</h1>
+            <p class="numero-contrato"></p>
+            <p>Basado en Propuesta PROP-202512-0015</p>
+            <p>08/12/2025</p>
+        </div>
+
+        <div class="seccion">
+            <h2>PARTES CONTRATANTES</h2>
+            <div class="partes">
+                <div class="parte">
+                    <h3>EL TRANSPORTISTA</h3>
+                    <p><strong>Razón Social:</strong> ACME TRANS SpA</p>
+                    <p><strong>RUT:</strong> 76.XXX.XXX-X</p>
+                    <p><strong>Dirección:</strong> Av. Principal 123, Santiago</p>
+                    <p><strong>Email:</strong> contacto@acmetrans.cl</p>
+                    <p><strong>Teléfono:</strong> +56 2 2XXX XXXX</p>
+                </div>
+                <div class="parte">
+                    <h3>EL CLIENTE</h3>
+                    <p><strong>Empresa:</strong> Retail Express Chile SA</p>
+                <div class="firma-empresa">
+                    <h4>Firma Empresa</h4>
+                    <p>ACME TRANS</p>
+                    <p>Representante Legal</p>
+                    
+                    <div class="sello">Firmado digitalmente</div>
+                    <div class="fecha">Fecha: 08/12/2025</div>
+                    
+                </div>
+                <div class="firma-cliente">
+                    <h4>Firma Cliente</h4>
+                    <p>Retail Express Chile SA</p>
+                    
+                    <div class="sello">Firmado digitalmente por Juan sanchez</div>
+                    <div class="fecha">Fecha: 08/12/2025</div>
+                    
+                </div>
+                    <p><strong>Teléfono:</strong> +56 2 2987 6543</p>
+                    <p><strong>Dirección:</strong> Las Condes 234, Santiago</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="seccion">
+            <h2>OBJETO DEL CONTRATO</h2>
+            <div class="objeto-contrato">
+                <p><strong></strong></p>
+                <p>El presente contrato tiene por objeto la prestación del servicio de transporte de carga desde <strong></strong> hasta <strong></strong>, bajo las condiciones establecidas en este documento.</p>
+            </div>
+        </div>
+
+        <div class="seccion">
+            <h2>DETALLES DEL SERVICIO</h2>
+            <div class="detalles-servicio">
+                <div class="detalles-grid">
+                    <div class="detalle-item">
+                        <strong>Origen</strong>
+                        
+                    </div>
+                    <div class="detalle-item">
+                        <strong>Destino</strong>
+                        
+                    </div>
+                    <div class="detalle-item">
+                        <strong>Distancia</strong>
+                         km
+                    </div>
+                    <div class="detalle-item">
+                        <strong>Tipo de vehículo</strong>
+                         - Mediana Capacidad
+                    </div>
+                    <div class="detalle-item">
+                        <strong>Cantidad de vehículos</strong>
+                         camión(es)
+                    </div>
+                    <div class="detalle-item">
+                        <strong>Fecha de salida</strong>
+                        
+                    </div>
+                    <div class="detalle-item">
+                        <strong>Fecha de retorno</strong>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="seccion">
+            <div class="monto-total">
+                <div class="label">MONTO TOTAL DEL CONTRATO</div>
+                <div class="valor">$0 CLP</div>
+            </div>
+        </div>
+
+        <div class="seccion">
+            <h2>CONDICIONES DE PAGO</h2>
+            <div class="clausula">
+                <p>50% al inicio del servicio, 50% al completar la entrega</p>
+            </div>
+        </div>
+
+        <div class="seccion">
+            <h2>CLÁUSULAS DEL CONTRATO</h2>
+            <div class="clausulas">
+                <div class="clausula">
+                    <h4>PRIMERA: Obligaciones del Transportista</h4>
+                    <p>El transportista se compromete a realizar el servicio de transporte en las fechas acordadas, con vehículos en óptimas condiciones técnicas y mecánicas, con conductores calificados y con todos los permisos legales vigentes.</p>
+                </div>
+                
+                <div class="clausula">
+                    <h4>SEGUNDA: Obligaciones del Cliente</h4>
+                    <p>El cliente se compromete a proporcionar toda la documentación necesaria para el transporte, asegurar que la carga esté correctamente embalada y etiquetada, y realizar los pagos en los plazos establecidos.</p>
+                </div>
+                
+                <div class="clausula">
+                    <h4>TERCERA: Seguro</h4>
+                    <p>ACME TRANS cuenta con póliza de seguro de responsabilidad civil y de carga según lo establecido por la normativa vigente. Los detalles específicos se encuentran disponibles en nuestras oficinas.</p>
+                </div>
+                
+                <div class="clausula">
+                    <h4>CUARTA: Causales de Término</h4>
+                    <p>El presente contrato podrá ser terminado anticipadamente por mutuo acuerdo de las partes, por incumplimiento grave de cualquiera de ellas, o por caso fortuito o fuerza mayor debidamente acreditado.</p>
+                </div>
+                
+                <div class="clausula">
+                    <h4>QUINTA: Jurisdicción y Competencia</h4>
+                    <p>Para todos los efectos derivados del presente contrato, las partes fijan su domicilio en la ciudad de Santiago y se someten a la jurisdicción de sus tribunales ordinarios de justicia.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="seccion">
+            <h2>TÉRMINOS Y CONDICIONES ADICIONALES</h2>
+            <div class="clausula">
+                <p style="white-space: pre-line;">1. Esta propuesta es válida solo para el servicio descrito.
+2. Los precios están sujetos a cambios en caso de modificación del servicio.
+3. ACME TRANS se reserva el derecho de rechazar carga peligrosa sin previo aviso.
+4. El cliente debe proporcionar toda la documentación necesaria para el transporte.
+5. Los tiempos de entrega son estimados y pueden variar según condiciones climáticas y de tráfico.</p>
+            </div>
+        </div>
+
+        <div class="firmas">
+            <div class="firma-box">
+                <div class="firma-linea"></div>
+                <p class="firma-label">ACME TRANS SpA</p>
+                <p>Representante Legal</p>
+            </div>
+            <div class="firma-box">
+                <div class="firma-linea"></div>
+                <p class="firma-label">Retail Express Chile SA</p>
+                <p>Cliente / Representante Legal</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Este contrato se genera automáticamente en base a la propuesta PROP-202512-0015</p>
+            <p>ACME TRANS - Sistema de Gestión de Cotizaciones y Propuestas</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MGCP - Módulo de Gestión de Cotizaciones</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <h1>ACME TRANS - MGCP</h1>
+                <p>Módulo de Gestión de Cotizaciones y Propuestas</p>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('index') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('listar_propuestas') }}">Propuestas</a></li>
+                <!-- La creación de propuestas es pregenerada; se elimina el enlace de nueva propuesta -->
+                <li><a href="{{ url_for('listar_propuestas') }}">Listado de Propuestas</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container main-content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer>
+        <p>&copy; 2025 ACME TRANS - Sistema de Gestión Integrado de Transporte</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

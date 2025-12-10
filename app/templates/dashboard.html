@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard">
+    <h2>Dashboard - Gestión de Propuestas</h2>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>{{ stats.total }}</h3>
+            <p>Propuestas Totales</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ stats.pregeneradas }}</h3>
+            <p>Propuestas Pregeneradas</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ stats.enviadas }}</h3>
+            <p>Enviadas a Clientes</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ stats.aceptadas }}</h3>
+            <p>Aceptadas</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ stats.revision }}</h3>
+            <p>En Revisión</p>
+        </div>
+    </div>
+
+    <div class="recent-proposals">
+        <h3>Propuestas Recientes</h3>
+        {% if propuestas %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Número</th>
+                        <th>Cliente</th>
+                        <th>Estado</th>
+                        <th>Precio Final</th>
+                        <th>Fecha Creación</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for prop in propuestas %}
+                    <tr>
+                        <td>{{ prop.numero_propuesta }}</td>
+                        <td>{{ prop.cliente.nombre }}</td>
+                        <td><span class="badge badge-{{ prop.estado|lower }}">{{ prop.estado }}</span></td>
+                        <td>{{ prop.precio_final|clp }}</td>
+                        <td>{{ prop.fecha_creacion.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>
+                            <a href="{{ url_for('ver_propuesta', propuesta_id=prop.id) }}" class="btn btn-small">Ver</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No hay propuestas registradas</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

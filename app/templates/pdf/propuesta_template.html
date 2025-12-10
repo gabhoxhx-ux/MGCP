@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Propuesta {{ numero_propuesta }}</title>
+    <link rel="stylesheet" href="{{ css_path }}">
+</head>
+<body>
+    <div class="documento">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo-empresa">
+                <h1>ACME TRANS</h1>
+                <p class="slogan">Transporte de Carga Confiable</p>
+            </div>
+            <div class="info-documento">
+                <h2>PROPUESTA ECONÓMICA</h2>
+                <p><strong>N°:</strong> {{ numero_propuesta }}</p>
+                <p><strong>Versión:</strong> {{ version }}</p>
+                <p><strong>Fecha:</strong> {{ fecha }}</p>
+            </div>
+        </div>
+
+        <hr class="separador">
+
+        <!-- Información del Cliente -->
+        <div class="seccion">
+            <h3>CLIENTE</h3>
+            <table class="tabla-info">
+                <tr>
+                    <td class="label">Empresa:</td>
+                    <td class="valor">{{ cliente.nombre }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Dirección:</td>
+                    <td class="valor">{{ cliente.direccion }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Email:</td>
+                    <td class="valor">{{ cliente.email }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Teléfono:</td>
+                    <td class="valor">{{ cliente.telefono }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Descripción del Servicio -->
+        <div class="seccion">
+            <h3>DESCRIPCIÓN DEL SERVICIO</h3>
+            <p class="descripcion">{{ descripcion_servicio }}</p>
+        </div>
+
+        <!-- Desglose de Costos -->
+        <div class="seccion">
+            <h3>DESGLOSE DE COSTOS</h3>
+            <table class="tabla-costos">
+                <thead>
+                    <tr>
+                        <th>Concepto</th>
+                        <th class="derecha">Monto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Costo Operativo del Servicio</td>
+                        <td class="derecha">{{ costo_directo|clp }}</td>
+                    </tr>
+                    <tr>
+                        <td>Costos Administrativos</td>
+                        <td class="derecha">{{ costo_indirecto|clp }}</td>
+                    </tr>
+                    <tr>
+                        <td>Utilidad ({{ utilidad_porcentaje }}%)</td>
+                        <td class="derecha">{{ utilidad_monto|clp }}</td>
+                    </tr>
+                    <tr class="total">
+                        <td><strong>TOTAL A PAGAR</strong></td>
+                        <td class="derecha"><strong>{{ precio_final|clp }}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Condiciones Comerciales -->
+        <div class="seccion">
+            <h3>CONDICIONES COMERCIALES</h3>
+            <ul class="lista-condiciones">
+                <li><strong>Validez de la Propuesta:</strong> {{ vigencia_horas }} horas desde la fecha de emisión</li>
+                <li><strong>Fecha de Vencimiento:</strong> {{ fecha_expiracion }}</li>
+                <li><strong>Condiciones de Pago:</strong> {{ condiciones_pago }}</li>
+                <li><strong>Tiempo de Entrega:</strong> Según coordinación con cliente</li>
+                <li><strong>Garantía de Servicio:</strong> Cumplimiento de tiempos y cuidado de mercancía</li>
+            </ul>
+        </div>
+
+        <!-- Términos y Condiciones -->
+        <div class="seccion">
+            <h3>TÉRMINOS Y CONDICIONES</h3>
+            <div class="terminos">
+                {{ terminos_condiciones }}
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <hr class="separador-footer">
+            <p class="texto-footer">
+                Esta propuesta ha sido generada automáticamente por el Sistema MGCP de ACME TRANS<br>
+                Para aceptar, rechazar o solicitar modificaciones, acceda al portal web proporcionado<br>
+                <strong>Contacto:</strong> contacto@acmetrans.cl | <strong>Teléfono:</strong> +56 2 1234 5678
+            </p>
+        </div>
+    </div>
+</body>
+</html>

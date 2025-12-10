@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta - {{ propuesta.numero_propuesta }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/portal_cliente.css') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #1a1a2e;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+        }
+
+        .header .subtitle {
+            color: #a0a0a0;
+            font-size: 1.1em;
+        }
+
+        .info-propuesta {
+            background: #16213e;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .info-propuesta span {
+            font-size: 1.1em;
+        }
+
+        .badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.85em;
+        }
+
+        .badge-enviada {
+            background: #f39c12;
+            color: white;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .section h2 {
+            color: #1a1a2e;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .detalle-servicio {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .detalle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .detalle-item {
+            background: #f0f0f0;
+            padding: 12px;
+            border-radius: 6px;
+        }
+
+        .detalle-item strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .tabla-costos {
+            width: 100%;
+            margin-top: 15px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .tabla-costos tr {
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .tabla-costos tr:last-child {
+            border-bottom: none;
+        }
+
+        .tabla-costos td {
+            padding: 15px;
+        }
+
+        .tabla-costos .label {
+            color: #666;
+        }
+
+        .tabla-costos .valor {
+            text-align: right;
+            font-weight: bold;
+            color: #1a1a2e;
+        }
+
+        .fila-total {
+            background: #667eea;
+            color: white !important;
+        }
+
+        .fila-total td {
+            font-size: 1.3em;
+            color: white !important;
+        }
+
+        .acciones-cliente {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+        }
+
+        .acciones-cliente h2 {
+            color: white;
+            text-align: center;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+        }
+
+        .botones-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .btn-opcion {
+            padding: 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-opcion:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .btn-aceptar {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-aceptar:hover {
+            background: #229954;
+        }
+
+        .btn-revision {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-revision:hover {
+            background: #2980b9;
+        }
+
+        .btn-rechazar {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-rechazar:hover {
+            background: #c0392b;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h3 {
+            color: #1a1a2e;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .mensaje-resultado {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .mensaje-exito {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+
+        .mensaje-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+
+        .contrato-section {
+            background: #e8f5e9;
+            border-left-color: #27ae60;
+        }
+
+        .firma-simulada {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            border: 2px dashed #667eea;
+        }
+
+        .firma-simulada input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            margin: 10px 0;
+        }
+
+        .btn-firmar {
+            background: #27ae60;
+            color: white;
+            width: 100%;
+            padding: 15px;
+        }
+
+        .btn-firmar:hover {
+            background: #229954;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚛 ACME TRANS</h1>
+            <p class="subtitle">Propuesta de Transporte</p>
+        </div>
+
+        <div class="info-propuesta">
+            <span><strong>Propuesta #:</strong> {{ propuesta.numero_propuesta }}</span>
+            <span><strong>Versión:</strong> {{ propuesta.version }}</span>
+            <span class="badge badge-enviada">{{ propuesta.estado }}</span>
+        </div>
+
+        <div class="content">
+            <!-- Cliente -->
+            <div class="section">
+                <h2>📋 Información del Cliente</h2>
+                <div class="detalle-servicio">
+                    <p><strong>Empresa:</strong> {{ propuesta.cliente.nombre }}</p>
+                    <p><strong>Email:</strong> {{ propuesta.cliente.email }}</p>
+                    <p><strong>Teléfono:</strong> {{ propuesta.cliente.telefono }}</p>
+                </div>
+            </div>
+
+            <!-- Servicio -->
+            <div class="section">
+                <h2>🚚 Detalles del Servicio</h2>
+                <div class="detalle-servicio">
+                    <h3>{{ propuesta.tipo_servicio }}</h3>
+                    <div class="detalle-grid">
+                        <div class="detalle-item">
+                            <strong>Origen</strong>
+                            {{ propuesta.origen }}
+                        </div>
+                        <div class="detalle-item">
+                            <strong>Destino</strong>
+                            {{ propuesta.destino }}
+                        </div>
+                        <div class="detalle-item">
+                            <strong>Distancia</strong>
+                            {{ propuesta.distancia_km }} km
+                        </div>
+                        <div class="detalle-item">
+                            <strong>Tiempo estimado</strong>
+                            {{ propuesta.tiempo_estimado_horas }} horas
+                        </div>
+                        <div class="detalle-item">
+                            <strong>Tipo de camión</strong>
+                            {{ propuesta.tipo_camion }} - {{ 'Gran Capacidad' if propuesta.tipo_camion == 'GC' else 'Mediana Capacidad' }}
+                        </div>
+                        <div class="detalle-item">
+                            <strong>Cantidad</strong>
+                            {{ propuesta.cantidad_camiones }} camión(es)
+                        </div>
+                        <div class="detalle-item">
+                            <strong>Carga</strong>
+                            {{ propuesta.peso_kg }} kg
+                        </div>
+                        <div class="detalle-item">
+                            <strong>Volumen</strong>
+                            {{ propuesta.volumen_m3 }} m³
+                        </div>
+                        <div class="detalle-item">
+                            <strong>Fecha salida</strong>
+                            {{ propuesta.fecha_salida.strftime('%d-%m-%Y') }}
+                        </div>
+                        <div class="detalle-item">
+                            <strong>Fecha retorno</strong>
+                            {{ propuesta.fecha_retorno.strftime('%d-%m-%Y') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Costos -->
+            <div class="section">
+                <h2>💰 Desglose de Costos</h2>
+                <table class="tabla-costos">
+                    <tr>
+                        <td class="label">Combustible:</td>
+                        <td class="valor">{{ propuesta.costo_combustible|clp }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Peajes:</td>
+                        <td class="valor">{{ propuesta.costo_peajes|clp }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Viáticos:</td>
+                        <td class="valor">{{ propuesta.costo_viaticos|clp }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Hospedaje:</td>
+                        <td class="valor">{{ propuesta.costo_hospedaje|clp }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Tarifa base:</td>
+                        <td class="valor">{{ propuesta.tarifa_base|clp }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Costos administrativos:</td>
+                        <td class="valor">{{ propuesta.costo_indirecto_aplicado|clp }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Utilidad ({{ propuesta.utilidad_porcentaje }}%):</td>
+                        <td class="valor">{{ (propuesta.costo_directo * propuesta.utilidad_porcentaje / 100)|clp }}</td>
+                    </tr>
+                    <tr class="fila-total">
+                        <td>PRECIO TOTAL</td>
+                        <td>{{ propuesta.precio_final|clp }}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Acciones del Cliente -->
+            {% if propuesta.estado == 'ENVIADA' %}
+            <div class="section acciones-cliente">
+                <h2>¿Qué desea hacer con esta propuesta?</h2>
+                <div class="botones-grid">
+                    <button class="btn-opcion btn-aceptar" onclick="aceptarPropuesta()">
+                        ✅ Aceptar y generar contrato
+                    </button>
+                    <button class="btn-opcion btn-revision" onclick="solicitarRevision()">
+                        📝 Solicitar revisión de propuesta
+                    </button>
+                    <button class="btn-opcion btn-rechazar" onclick="rechazarPropuesta()">
+                        ❌ Rechazar propuesta
+                    </button>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Resultado -->
+            <div id="resultado" style="display: none;"></div>
+
+            <!-- Sección de contrato (aparece después de aceptar) -->
+            <div id="contratoSection" style="display: none;" class="section contrato-section">
+                <h2>📄 Contrato Generado</h2>
+                <p>Su contrato ha sido generado exitosamente. Por favor, fírmelo digitalmente para finalizar.</p>
+                <div class="firma-simulada">
+                    <h3>Firma Digital Simulada</h3>
+                    <p>Ingrese su nombre completo como firma:</p>
+                    <input type="text" id="firmaInput" placeholder="Nombre completo" />
+                    <button class="btn btn-firmar" onclick="firmarContrato()">
+                        ✍️ Firmar Contrato
+                    </button>
+                </div>
+                <div id="resultadoFirma"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para revisión -->
+    <div id="modalRevision" class="modal">
+        <div class="modal-content">
+            <h3>Solicitar Revisión de Propuesta</h3>
+            <p>Por favor, indique qué aspectos necesita que se revisen:</p>
+            <div class="form-group">
+                <label>Comentarios:</label>
+                <textarea id="comentariosRevision" rows="5" placeholder="Ejemplo: Necesito que se ajuste la utilidad, o que se modifique la fecha de salida..."></textarea>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="cerrarModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="enviarRevision()">Enviar Solicitud</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const token = '{{ propuesta.token_acceso }}';
+        let contratoId = null;
+
+        function aceptarPropuesta() {
+            if (!confirm('¿Está seguro de que desea ACEPTAR esta propuesta? Se generará un contrato automáticamente.')) {
+                return;
+            }
+
+            fetch(`/cliente/respuesta/${token}`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    tipo: 'ACEPTADA',
+                    comentarios: 'Propuesta aceptada por el cliente'
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    mostrarMensaje('✅ ¡Propuesta aceptada! Se ha generado su contrato.', 'exito');
+                    
+                    if (data.contrato_generado) {
+                        contratoId = data.contrato_id;
+                        setTimeout(() => {
+                            document.getElementById('contratoSection').style.display = 'block';
+                            document.querySelector('.acciones-cliente').style.display = 'none';
+                        }, 2000);
+                    }
+                } else {
+                    mostrarMensaje('❌ Error: ' + data.error, 'error');
+                }
+            })
+            .catch(err => {
+                mostrarMensaje('❌ Error de conexión: ' + err.message, 'error');
+            });
+        }
+
+        function solicitarRevision() {
+            document.getElementById('modalRevision').style.display = 'flex';
+        }
+
+        function cerrarModal() {
+            document.getElementById('modalRevision').style.display = 'none';
+        }
+
+        function enviarRevision() {
+            const comentarios = document.getElementById('comentariosRevision').value.trim();
+            
+            if (!comentarios) {
+                alert('Por favor, ingrese sus comentarios sobre la revisión.');
+                return;
+            }
+
+            fetch(`/cliente/respuesta/${token}`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    tipo: 'REVISION',
+                    comentarios: comentarios
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    cerrarModal();
+                    mostrarMensaje('✅ Solicitud de revisión enviada. El director revisará su propuesta.', 'exito');
+                    document.querySelector('.acciones-cliente').style.display = 'none';
+                } else {
+                    mostrarMensaje('❌ Error: ' + data.error, 'error');
+                }
+            })
+            .catch(err => {
+                mostrarMensaje('❌ Error de conexión: ' + err.message, 'error');
+            });
+        }
+
+        function rechazarPropuesta() {
+            if (!confirm('¿Está seguro de que desea RECHAZAR esta propuesta?')) {
+                return;
+            }
+
+            fetch(`/cliente/respuesta/${token}`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    tipo: 'RECHAZADA',
+                    comentarios: 'Propuesta rechazada por el cliente'
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    mostrarMensaje('❌ Propuesta rechazada. Gracias por su tiempo.', 'exito');
+                    document.querySelector('.acciones-cliente').style.display = 'none';
+                } else {
+                    mostrarMensaje('❌ Error: ' + data.error, 'error');
+                }
+            })
+            .catch(err => {
+                mostrarMensaje('❌ Error de conexión: ' + err.message, 'error');
+            });
+        }
+
+        function firmarContrato() {
+            const firma = document.getElementById('firmaInput').value.trim();
+            
+            if (!firma) {
+                alert('Por favor, ingrese su nombre completo para firmar.');
+                return;
+            }
+
+            if (!contratoId) {
+                mostrarMensaje('❌ Error: No se encontró el contrato para firmar.', 'error');
+                return;
+            }
+
+            fetch(`/cliente/firmar/${token}/${contratoId}`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({firma: firma})
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    const div = document.getElementById('resultadoFirma');
+                    div.innerHTML = `<div class="mensaje-exito">✅ Contrato firmado exitosamente por: ${firma}<br><br><a class="btn btn-primary" href="${data.url_ver}" target="_blank">Ver contrato firmado</a> <a class="btn btn-secondary" href="${data.url_descarga}">Descargar</a></div>`;
+                    document.querySelector('.firma-simulada').style.display = 'none';
+                } else {
+                    const div = document.getElementById('resultadoFirma');
+                    div.innerHTML = `<div class="mensaje-error">❌ Error: ${data.error}</div>`;
+                }
+            })
+            .catch(err => {
+                const div = document.getElementById('resultadoFirma');
+                div.innerHTML = `<div class="mensaje-error">❌ Error de conexión: ${err.message}</div>`;
+            });
+        }
+
+        function mostrarMensaje(mensaje, tipo) {
+            const div = document.getElementById('resultado');
+            div.className = tipo === 'exito' ? 'mensaje-resultado mensaje-exito' : 'mensaje-resultado mensaje-error';
+            div.textContent = mensaje;
+            div.style.display = 'block';
+            
+            window.scrollTo({ top: div.offsetTop - 100, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

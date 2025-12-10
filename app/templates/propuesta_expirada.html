@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="propuesta-expirada">
+    <div class="alert alert-warning">
+        <h2>⚠️ Propuesta Expirada</h2>
+        <p>La propuesta <strong>{{ propuesta.numero_propuesta }}</strong> ha expirado.</p>
+        <p>Fecha de expiración: <strong>{{ propuesta.fecha_expiracion.strftime('%d/%m/%Y %H:%M') }}</strong></p>
+        <p>Por favor, contacte con ACME TRANS para solicitar una nueva propuesta.</p>
+    </div>
+</div>
+{% endblock %}
