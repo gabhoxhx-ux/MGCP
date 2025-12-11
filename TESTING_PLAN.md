@@ -199,10 +199,55 @@ Verifica si hay versiones vulnerables en `requirements.txt`. Reporta:
 
 ---
 
+## Tests Automáticos (pytest)
+
+Ejecuta antes de pruebas manuales para verificar salud del sistema.
+
+### Comandos
+
+**Todos los tests (verbose):**
+```powershell
+pytest -v
+```
+
+**Resumen rápido:**
+```powershell
+pytest -q
+```
+
+**Test específico:**
+```powershell
+pytest tests/test_smoke.py::test_home_status_code -v
+```
+
+**Con cobertura de código:**
+```powershell
+pytest --cov=app
+```
+
+**Auditoría de dependencias:**
+```powershell
+pip-audit
+```
+
+### Cobertura de Tests Incluida
+
+- ✅ **Config**: Imports y app setup correcto.
+- ✅ **Acceso**: Home accesible, login requerido en `/propuestas`.
+- ✅ **BD**: Tablas Cliente y Propuesta existen.
+- ✅ **Seguridad**: Headers HSTS, CSP presentes; sin datos sensibles expuestos.
+- ✅ **Smoke**: Rutas básicas responden (home 200, portal 200).
+
+**Resultado esperado:** 12 passed en ~1.6s. Si ves FAILED, revisa mensajes de error antes de continuar.
+
+---
+
 ## Checklist Final
 
 Antes de dar por concluido el testing:
 
+- [ ] Pytest: todos los tests pasan (`pytest -q` → 12 passed).
+- [ ] pip-audit: sin CVE críticas.
 - [ ] Login funciona (usuario admin).
 - [ ] Dashboard carga sin errores.
 - [ ] Portal cliente muestra propuestas.
@@ -215,8 +260,6 @@ Antes de dar por concluido el testing:
 - [ ] Headers de seguridad presentes.
 - [ ] Documentos legibles y precisos.
 - [ ] Acciones logged/auditadas.
-- [ ] Pruebas automáticas pasan (`pytest -v`).
-- [ ] Sin CVE críticas en dependencias (`pip-audit`).
 - [ ] Accesibilidad básica (navegación Tab).
 
 ---

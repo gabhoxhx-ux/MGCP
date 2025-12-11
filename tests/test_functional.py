@@ -30,9 +30,9 @@ class TestAccess:
         assert resp.status_code in (200, 302), "Home not accessible"
 
     def test_dashboard_protected(self, client):
-        """Dashboard should redirect unauthenticated users."""
-        resp = client.get("/dashboard", follow_redirects=False)
-        assert resp.status_code in (302, 401, 403), "Dashboard not protected"
+        """Admin /propuestas route should redirect unauthenticated users."""
+        resp = client.get("/propuestas", follow_redirects=False)
+        assert resp.status_code in (302, 401, 403), "Admin route not protected"
 
     def test_login_page_accessible(self, client):
         """Login page should be accessible."""

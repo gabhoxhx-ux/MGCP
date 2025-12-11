@@ -8,7 +8,7 @@ import sys
 def verificar_estructura():
     """Verifica que existan todos los archivos necesarios"""
     print("="*70)
-    print("🔍 VERIFICACIÓN DEL SISTEMA MGCP")
+    print("[*] VERIFICACION DEL SISTEMA MGCP")
     print("="*70)
     print()
     
@@ -54,10 +54,10 @@ def verificar_estructura():
         existe = os.path.exists(ruta_completa)
         
         if existe:
-            print(f"✅ {descripcion}: {archivo}")
+            print(f"[+] {descripcion}: {archivo}")
             archivos_encontrados += 1
         else:
-            print(f"❌ {descripcion}: {archivo} - NO ENCONTRADO")
+            print(f"[-] {descripcion}: {archivo} - NO ENCONTRADO")
             archivos_faltantes.append(archivo)
     
     print()
@@ -66,29 +66,29 @@ def verificar_estructura():
     
     if archivos_faltantes:
         print()
-        print("⚠️ ADVERTENCIA: Archivos faltantes:")
+        print("[!] ADVERTENCIA: Archivos faltantes:")
         for archivo in archivos_faltantes:
             print(f"   - {archivo}")
         return False
     
-    print("✅ Todos los archivos necesarios están presentes")
+    print("[+] Todos los archivos necesarios estan presentes")
     return True
 
 def verificar_base_datos():
     """Verifica la base de datos"""
     print()
     print("="*70)
-    print("🗄️ Verificando base de datos...")
+    print("[*] Verificando base de datos...")
     print()
     
     db_path = os.path.join(os.path.dirname(__file__), 'database', 'mgcp.db')
     
     if not os.path.exists(db_path):
-        print("❌ Base de datos no encontrada")
+        print("[-] Base de datos no encontrada")
         print("   Ejecute: python configurar_sistema.py")
         return False
     
-    print(f"✅ Base de datos encontrada: {db_path}")
+    print(f"[+] Base de datos encontrada: {db_path}")
     
     # Intentar conectar y contar registros
     try:
@@ -102,36 +102,36 @@ def verificar_base_datos():
             documentos = DocumentoGenerado.query.count()
             
             print()
-            print("📊 Estadísticas de la base de datos:")
-            print(f"   👥 Clientes: {clientes}")
-            print(f"   📋 Propuestas: {propuestas}")
-            print(f"   📄 Documentos: {documentos}")
+            print("[*] Estadisticas de la base de datos:")
+            print(f"   [i] Clientes: {clientes}")
+            print(f"   [i] Propuestas: {propuestas}")
+            print(f"   [i] Documentos: {documentos}")
             
             if clientes == 0:
                 print()
-                print("⚠️ No hay clientes en el sistema")
+                print("[!] No hay clientes en el sistema")
                 print("   Ejecute: python inicializar_clientes.py")
                 return False
             
             if propuestas == 0:
                 print()
-                print("⚠️ No hay propuestas en el sistema")
+                print("[!] No hay propuestas en el sistema")
                 print("   Ejecute: python generar_propuestas.py")
                 return False
             
             print()
-            print("✅ Base de datos con datos correctos")
+            print("[+] Base de datos con datos correctos")
             return True
             
     except Exception as e:
-        print(f"❌ Error al verificar base de datos: {e}")
+        print(f"[-] Error al verificar base de datos: {e}")
         return False
 
 def verificar_dependencias():
     """Verifica las dependencias de Python"""
     print()
     print("="*70)
-    print("📦 Verificando dependencias de Python...")
+    print("[*] Verificando dependencias de Python...")
     print()
     
     dependencias = [
@@ -145,26 +145,26 @@ def verificar_dependencias():
     for dep in dependencias:
         try:
             __import__(dep)
-            print(f"✅ {dep}")
+            print(f"[+] {dep}")
         except ImportError:
-            print(f"❌ {dep} - NO INSTALADO")
+            print(f"[-] {dep} - NO INSTALADO")
             dependencias_ok = False
     
     if not dependencias_ok:
         print()
-        print("⚠️ Instale las dependencias:")
+        print("[!] Instale las dependencias:")
         print("   pip install -r requirements.txt")
         return False
     
     print()
-    print("✅ Todas las dependencias instaladas")
+    print("[+] Todas las dependencias instaladas")
     return True
 
 def verificar_directorios():
     """Verifica que existan los directorios necesarios"""
     print()
     print("="*70)
-    print("📁 Verificando estructura de directorios...")
+    print("[*] Verificando estructura de directorios...")
     print()
     
     directorios = [
@@ -181,13 +181,13 @@ def verificar_directorios():
     for directorio in directorios:
         ruta = os.path.join(os.path.dirname(__file__), directorio)
         if os.path.exists(ruta):
-            print(f"✅ {directorio}/")
+            print(f"[+] {directorio}/")
         else:
-            print(f"⚠️ {directorio}/ - Creando...")
+            print(f"[!] {directorio}/ - Creando...")
             os.makedirs(ruta, exist_ok=True)
     
     print()
-    print("✅ Estructura de directorios correcta")
+    print("[+] Estructura de directorios correcta")
     return True
 
 def main():

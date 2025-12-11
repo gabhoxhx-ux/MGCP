@@ -21,36 +21,36 @@ def main():
     
     with app.app_context():
         # Paso 1: Crear tablas
-        print("📊 PASO 1: Creando estructura de base de datos...")
+        print("[*] PASO 1: Creando estructura de base de datos...")
         db.create_all()
-        print("✅ Tablas creadas correctamente")
+        print("[OK] Tablas creadas correctamente")
         print()
         
         # Paso 2: Inicializar clientes
-        print("👥 PASO 2: Inicializando clientes de ejemplo...")
+        print("[*] PASO 2: Inicializando clientes de ejemplo...")
         inicializar_clientes.inicializar_clientes()
         print()
         
         # Verificar si hay clientes
         cantidad_clientes = Cliente.query.count()
         if cantidad_clientes == 0:
-            print("⚠️  ADVERTENCIA: No hay clientes en la base de datos")
+            print("[!] ADVERTENCIA: No hay clientes en la base de datos")
             print("   Por favor, agregue clientes antes de generar propuestas")
             return
         
         # Paso 3: Generar propuestas pregeneradas
-        print("📋 PASO 3: Generando propuestas pregeneradas...")
+        print("[*] PASO 3: Generando propuestas pregeneradas...")
         generar_propuestas.generar_propuestas_pregeneradas()
         print()
         
         print("="*70)
-        print("✅ CONFIGURACIÓN COMPLETADA EXITOSAMENTE")
+        print("[OK] CONFIGURACION COMPLETADA EXITOSAMENTE")
         print("="*70)
         print()
-        print("🚀 Puede iniciar el sistema con:")
+        print("[*] Puede iniciar el sistema con:")
         print("   python run.py")
         print()
-        print("🌐 O acceder directamente a:")
+        print("[*] O acceder directamente a:")
         print("   http://localhost:5000")
         print()
         print("="*70)

@@ -180,7 +180,7 @@ Total estimado: {clp(precio_final)}"""
             
             db.session.add(propuesta)
             propuestas_generadas += 1
-            print(f"✓ Propuesta {numero_propuesta} generada para {cliente.nombre}")
+            print(f"[+] Propuesta {numero_propuesta} generada para {cliente.nombre}")
     
     db.session.commit()
     print(f"\n{'='*60}")

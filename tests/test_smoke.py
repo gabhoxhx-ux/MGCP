@@ -16,9 +16,9 @@ def test_home_status_code():
 
 
 def test_dashboard_requires_login():
-    """Admin dashboard should be protected (redirect when unauthenticated)."""
+    """Admin /propuestas route should be protected (redirect when unauthenticated)."""
     with app.test_client() as client:
-        resp = client.get("/dashboard", follow_redirects=False)
+        resp = client.get("/propuestas", follow_redirects=False)
         assert resp.status_code in (302, 401, 403)
 
 
